@@ -1,0 +1,12 @@
+body {
+    font-size: x-large;
+}
+textarea {
+    font-size: x-large;
+}
+input#submit_button {
+    font-size: x-large;
+}
+input#reset_button {
+    font-size: x-large;
+}
