@@ -8,6 +8,5 @@
 
 /**  define('TOP_PAGE', http://america66.work); */
 
-const TOP_PAGE = 'https://america66.work';
+const TOP_PAGE = 'https://www.america66.work';
 
-?>

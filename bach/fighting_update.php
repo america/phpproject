@@ -57,4 +57,4 @@ if(isset($_POST['id']) && isset($_POST['word'])){
 } else {
   echo 'FAIL TO AJAX REQUEST';
 }
-?>
+

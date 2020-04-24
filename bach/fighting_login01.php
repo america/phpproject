@@ -6,73 +6,108 @@
  * Time: 14:43
  */
 
-// 設定
-define('LOCATION', '/');  // ログアウト後飛び先
+include '../function/const.php';
 
 $login = req('login');
 if (!empty($login))
 {
+//  print('login =' . $login);
   login();
 }
 
 // ログインしているか確認
 session_start();
 $id = $_SESSION['id'];
+//print('id = ' . $id. '<br>');
 
 if (!$id) // ログインしていない場合
 {
   echo <<<EOM
   <script type='text/javascript'>
   
-  function showConfirmDialog(message, resolve, reject) {
-    if (window.confirm(message)) {
-      return Promise.resolve();
-    }
-    return Promise.reject();                                                                                                                        
-}
+  // function showConfirmDialog(message, resolve, reject) {
+  //   if (window.confirm(message)) {
+  //     // return Promise.resolve();
+  //     return resolve;
+  //   }
+  //   // return Promise.reject();   
+  //   return reject;
+  // }
 
-//----------------
-// 共通関数
-//----------------
 function confirmExPromise(message) {
-  let _promise = new Promise(function(resolve, reject) {
-    // 別途定義されたコールバック関数を受け取る関数を呼び出す
-    showConfirmDialog(message, resolve, reject);
-  });
-  // 戻り値はPromise
-  return _promise;
+  if(window.confirm(message)) {
+    return Promise.resolve();
+  }
+  return Promise.reject();
 }
 //----------------
 
 function executeTask() {
   // TODO PHPのpage_login()関数を呼びたい
-  window.alert("OK");
+  console.log('OK!');
 
+  let url = 'https://www.america66.work/bach/fighting_login01.php?login=1';
+  
+  return new Promise(function (resolve) { 
+    // インスタンスを作成する
+    let xhr = new XMLHttpRequest();
+  
+    // 指定のサーバーと通信を開始する
+    xhr.open('GET', url);
+    xhr.send();
+  
+    // 通信が正常に終了したかを確認する
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4 && xhr.status === 200) {
+        // サーバーから取得したデータを使う
+        // window.alert('通信正常終了')
+      }
+      else {
+        die('通信異常終了')
+      }
+  
+  
+  
+   
   }
+
+  });
+  
+}
 
 function cancelTask() {
   // TODO トップページに移動したい
-  console.debug('Cancel!');
+  console.log('Cancel!');
+  setTimeout(function() {
+    location.href = 'https://www.america66.work';
+ }, 0);
+  
 }
 
-function method01() {
+function one(node, event, callback) {
+  let handler = function(e) {
+    callback.call(this, e);
+    node.removeEventListener(event, handler);
+  };
+  node.addEventListener(event, handler);
+}
+
+one(window, 'DOMContentLoaded', function(event) {
   // 確認ダイアログ表示
   confirmExPromise('ログインしますか?')
     .then(executeTask)  // OK時の処理
     .catch(cancelTask); // Cancel時の処理
-}
-
+});
 
   </script>
 EOM;
-//  print("Confirmation = " . $Confirmation);
 
-//  if ($Confirmation == true) {
-//    page_login();
-//  } else {
-//    header("Location: " . LOCATION);
-//  }
+  page_login();
 }
+
+// ユーザ名がセットされているかを最終確認
+if (empty($id)) die("ログインに失敗しました。");
+
 
 //-------------------------------------------------------//
 // 処理がここまでたどり着けば認証完了ということになる。          //
@@ -126,6 +161,7 @@ function req($key)
 function login()
 {
 try {
+//  print('login\n');
   $ini_array = parse_ini_file("../settings.ini", true);
 
   $first_section = $ini_array["first_section"];
@@ -175,7 +211,7 @@ try {
 
 } catch (PDOException $e) {
   print "Error!: " . $e->getMessage() . "<br/>";
-
+} catch (Exception $e) {
   die();
 }
 
